@@ -142,7 +142,10 @@ export default function SectionEditorPage() {
   if (section.key === 'hero') return <Navigate to="/admin/content/hero" replace />;
   const contentResource = {
     ...resources['content/story'],
-    fields: resources['content/story'].fields.filter((field) => field.key !== 'section_id'),
+    fields: resources['content/story'].fields.filter(
+      (field) =>
+        field.key !== 'section_id' && (section.key !== 'categories' || field.key !== 'image_id'),
+    ),
   };
   return (
     <>
@@ -163,7 +166,7 @@ export default function SectionEditorPage() {
       </PageHeader>
       <p className="admin-notice">
         {section.key === 'categories'
-          ? 'All active categories appear automatically, ordered by their category display order. Content rows can customize a category image and label. The first row supplies the section heading.'
+          ? 'All active categories appear automatically, ordered by their category display order. Change each image in Categories. Content rows can customize labels, and the first row supplies the section heading.'
           : 'Lower display order appears first. For brand values, each content row is a card. The first row supplies the section heading, image and automatic collection.'}
       </p>
       <div className="admin-table-scroll">

@@ -24,7 +24,7 @@ export function Categories() {
         <div className="category-grid">
           {(data?.categories || []).map((category) => {
             const item = config?.items?.find((item) => item.category_id === category.id);
-            const image = item?.media?.path || category.media?.path;
+            const image = category.media?.path || item?.media?.path;
             return (
               <Link to={'/categories/' + category.slug} className="category" key={category.id}>
                 {image && (
