@@ -2,7 +2,7 @@
 
 @font-face {
   font-family: 'TAN - HEADLINE';
-  src: local('TAN - HEADLINE'), local('TAN HEADLINE'), local('TAN-HEADLINE');
+  src: url('../assets/TANHEADLINE-Regular.otf') format('opentype');
   font-style: normal;
   font-weight: 400 900;
   font-display: swap;
