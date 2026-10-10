@@ -12,7 +12,7 @@
     "cloudinary:deploy": "npm run cloudinary:deploy --workspace @evolve/backend",
     "cloudinary:serve": "npm run cloudinary:serve --workspace @evolve/backend",
     "dev": "npm run dev --workspace @evolve/frontend",
-    "build": "npm run build --workspace @evolve/frontend",
+    "build": "npm run build --workspace @evolve/frontend && node -e \"fs.cpSync('frontend/dist', 'dist', { recursive: true })\"",
     "preview": "npm run preview --workspace @evolve/frontend",
     "lint": "npm run lint --workspace @evolve/frontend",
     "test": "npm test --workspaces --if-present",
