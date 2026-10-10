@@ -1,0 +1,30 @@
+{
+  "name": "evolve-store",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "cloudinary:secrets": "npm run cloudinary:secrets --workspace @evolve/backend",
+    "cloudinary:deploy": "npm run cloudinary:deploy --workspace @evolve/backend",
+    "cloudinary:serve": "npm run cloudinary:serve --workspace @evolve/backend",
+    "dev": "npm run dev --workspace @evolve/frontend",
+    "build": "npm run build --workspace @evolve/frontend",
+    "preview": "npm run preview --workspace @evolve/frontend",
+    "lint": "npm run lint --workspace @evolve/frontend",
+    "test": "npm test --workspaces --if-present",
+    "format": "prettier --write frontend backend/scripts backend/tests backend/package.json backend/README.md docs package.json tsconfig.json vercel.json .prettierrc.json README.md",
+    "format:check": "prettier --check frontend backend/scripts backend/tests backend/package.json backend/README.md docs package.json tsconfig.json vercel.json .prettierrc.json README.md",
+    "check": "npm run format:check && npm run lint && npm test && npm run build",
+    "db:link": "npm run db:link --workspace @evolve/backend",
+    "db:push": "npm run db:push --workspace @evolve/backend",
+    "db:start": "npm run db:start --workspace @evolve/backend",
+    "db:stop": "npm run db:stop --workspace @evolve/backend"
+  },
+  "devDependencies": {
+    "prettier": "^3.9.9"
+  }
+}

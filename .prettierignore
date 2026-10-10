@@ -1,0 +1,6 @@
+node_modules
+dist
+package-lock.json
+.local
+backend/supabase/.temp
+backend/supabase/.branches

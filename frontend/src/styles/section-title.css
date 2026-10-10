@@ -1,0 +1,36 @@
+.section-title {
+  position: relative;
+  isolation: isolate;
+}
+.section-title.section-title {
+  font-weight: 700;
+}
+.section-title > .section-title-outline {
+  position: absolute;
+  inset: 0;
+  display: block;
+  color: inherit;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 1px currentColor;
+  opacity: 0.13;
+  transform: translateY(-0.22em) scale(1.3);
+  transform-origin: center;
+  pointer-events: none;
+  user-select: none;
+  z-index: -1;
+}
+.section-title > .section-title-text {
+  position: relative;
+  display: block;
+  color: inherit;
+}
+.section-title-outline * {
+  color: inherit !important;
+  -webkit-text-fill-color: transparent;
+}
+@media (max-width: 700px) {
+  .section-title > .section-title-outline {
+    transform: translateY(-0.18em) scale(1.18);
+    opacity: 0.1;
+  }
+}

@@ -1,0 +1,397 @@
+[
+  {
+    "table": "media",
+    "values": {
+      "id": "e7010000-0000-4000-8000-000000000010",
+      "path": "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&w=1800&q=85&fm=webp",
+      "name": "Hero training",
+      "mime_type": "image/webp",
+      "size": 1,
+      "folder": "homepage"
+    },
+    "conflict": "id"
+  },
+  {
+    "table": "media",
+    "values": {
+      "id": "e7010000-0000-4000-8000-000000000011",
+      "path": "https://images.unsplash.com/photo-1552902865-b72c031ac5ea?auto=format&fit=crop&w=1100&q=85&fm=webp",
+      "name": "Sweatpants lifestyle",
+      "mime_type": "image/webp",
+      "size": 1,
+      "folder": "homepage"
+    },
+    "conflict": "id"
+  },
+  {
+    "table": "media",
+    "values": {
+      "id": "e7010000-0000-4000-8000-000000000012",
+      "path": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1200&q=85&fm=webp",
+      "name": "Core collection",
+      "mime_type": "image/webp",
+      "size": 1,
+      "folder": "homepage"
+    },
+    "conflict": "id"
+  },
+  {
+    "table": "categories",
+    "values": {
+      "id": "e7010000-0000-4000-8000-000000000020",
+      "name": "Gym wear",
+      "name_ar": "ملابس التدريب",
+      "slug": "gym-wear",
+      "image_id": "e7010000-0000-4000-8000-000000000010",
+      "display_order": 0,
+      "active": true
+    },
+    "conflict": "id"
+  },
+  {
+    "table": "categories",
+    "values": {
+      "id": "e7010000-0000-4000-8000-000000000021",
+      "name": "Sweatpants",
+      "name_ar": "البناطيل الرياضية",
+      "slug": "sweatpants",
+      "image_id": "e7010000-0000-4000-8000-000000000011",
+      "display_order": 1,
+      "active": true
+    },
+    "conflict": "id"
+  },
+  {
+    "table": "collections",
+    "values": {
+      "id": "e7010000-0000-4000-8000-000000000030",
+      "name": "Core Collection",
+      "slug": "core",
+      "active": true,
+      "featured": true,
+      "display_order": 0
+    },
+    "conflict": "id"
+  },
+  {
+    "table": "collections",
+    "values": {
+      "id": "e7010000-0000-4000-8000-000000000031",
+      "name": "Best Sellers",
+      "slug": "best-sellers",
+      "active": true,
+      "featured": false,
+      "display_order": 1
+    },
+    "conflict": "id"
+  },
+  {
+    "table": "collections",
+    "values": {
+      "id": "e7010000-0000-4000-8000-000000000032",
+      "name": "New Arrivals",
+      "slug": "new-arrivals",
+      "active": true,
+      "featured": false,
+      "display_order": 2
+    },
+    "conflict": "id"
+  },
+  {
+    "table": "homepage_sections",
+    "values": {
+      "id": "e7010000-0000-4000-8000-000000000300",
+      "key": "hero",
+      "title": "Hero",
+      "display_order": 0,
+      "active": true,
+      "published": true
+    },
+    "conflict": "key"
+  },
+  {
+    "table": "homepage_sections",
+    "values": {
+      "id": "e7010000-0000-4000-8000-000000000301",
+      "key": "strip",
+      "title": "Moving brand strip",
+      "display_order": 1,
+      "active": true,
+      "published": true
+    },
+    "conflict": "key"
+  },
+  {
+    "table": "homepage_sections",
+    "values": {
+      "id": "e7010000-0000-4000-8000-000000000302",
+      "key": "categories",
+      "title": "Categories",
+      "display_order": 2,
+      "active": true,
+      "published": true
+    },
+    "conflict": "key"
+  },
+  {
+    "table": "homepage_sections",
+    "values": {
+      "id": "e7010000-0000-4000-8000-000000000303",
+      "key": "products",
+      "title": "Featured products",
+      "display_order": 3,
+      "active": true,
+      "published": true
+    },
+    "conflict": "key"
+  },
+  {
+    "table": "homepage_sections",
+    "values": {
+      "id": "e7010000-0000-4000-8000-000000000304",
+      "key": "core_collection",
+      "title": "Core collection",
+      "display_order": 4,
+      "active": true,
+      "published": true
+    },
+    "conflict": "key"
+  },
+  {
+    "table": "homepage_sections",
+    "values": {
+      "id": "e7010000-0000-4000-8000-000000000305",
+      "key": "story",
+      "title": "Our story",
+      "display_order": 5,
+      "active": true,
+      "published": true
+    },
+    "conflict": "key"
+  },
+  {
+    "table": "homepage_sections",
+    "values": {
+      "id": "e7010000-0000-4000-8000-000000000306",
+      "key": "values",
+      "title": "Brand values",
+      "display_order": 6,
+      "active": true,
+      "published": true
+    },
+    "conflict": "key"
+  },
+  {
+    "table": "homepage_sections",
+    "values": {
+      "id": "e7010000-0000-4000-8000-000000000307",
+      "key": "faq",
+      "title": "FAQ",
+      "display_order": 7,
+      "active": true,
+      "published": true
+    },
+    "conflict": "key"
+  },
+  {
+    "table": "homepage_content",
+    "values": {
+      "id": "e7010000-0000-4000-8000-000000000400",
+      "section_id": "e7010000-0000-4000-8000-000000000300",
+      "cta_url": "/shop",
+      "background": "charcoal",
+      "display_order": 0,
+      "eyebrow": "ENGINEERED TO WORK. BUILT TO LIVE.",
+      "heading": "STRENGTH IN\nEVERY MOVE.",
+      "heading_ar": "القوة في\nكل حركة.",
+      "description": "Purpose-built essentials for the way you move. From your first rep to your next chapter.",
+      "description_ar": "ملابس أساسية تواكب طموحك. من أول تكرار إلى آخر خطوة.",
+      "cta_label": "Shop Now",
+      "cta_label_ar": "تسوق الآن",
+      "image_id": "e7010000-0000-4000-8000-000000000010"
+    },
+    "conflict": "id"
+  },
+  {
+    "table": "homepage_content",
+    "values": {
+      "id": "e7010000-0000-4000-8000-000000000401",
+      "section_id": "e7010000-0000-4000-8000-000000000302",
+      "cta_url": "/shop",
+      "background": "ivory",
+      "display_order": 0,
+      "eyebrow": "THE RIGHT GEAR. YOUR WAY.",
+      "heading": "Built for your everyday.",
+      "heading_ar": "مصممة لكل يوم."
+    },
+    "conflict": "id"
+  },
+  {
+    "table": "homepage_content",
+    "values": {
+      "id": "e7010000-0000-4000-8000-000000000402",
+      "section_id": "e7010000-0000-4000-8000-000000000302",
+      "cta_url": "/shop",
+      "background": "ivory",
+      "display_order": 1,
+      "heading": "Gym wear",
+      "heading_ar": "ملابس التدريب",
+      "category_id": "e7010000-0000-4000-8000-000000000020",
+      "image_id": "e7010000-0000-4000-8000-000000000010"
+    },
+    "conflict": "id"
+  },
+  {
+    "table": "homepage_content",
+    "values": {
+      "id": "e7010000-0000-4000-8000-000000000403",
+      "section_id": "e7010000-0000-4000-8000-000000000302",
+      "cta_url": "/shop",
+      "background": "ivory",
+      "display_order": 2,
+      "heading": "Sweatpants",
+      "heading_ar": "البناطيل الرياضية",
+      "category_id": "e7010000-0000-4000-8000-000000000021",
+      "image_id": "e7010000-0000-4000-8000-000000000011"
+    },
+    "conflict": "id"
+  },
+  {
+    "table": "homepage_content",
+    "values": {
+      "id": "e7010000-0000-4000-8000-000000000404",
+      "section_id": "e7010000-0000-4000-8000-000000000303",
+      "cta_url": "/shop",
+      "background": "ivory",
+      "display_order": 0,
+      "eyebrow": "HEAVY ROTATION. FOR A REASON.",
+      "heading": "Your next go-to.",
+      "heading_ar": "قطع أساسية مميزة.",
+      "collection_id": "e7010000-0000-4000-8000-000000000031"
+    },
+    "conflict": "id"
+  },
+  {
+    "table": "homepage_content",
+    "values": {
+      "id": "e7010000-0000-4000-8000-000000000405",
+      "section_id": "e7010000-0000-4000-8000-000000000304",
+      "cta_url": "/collections/core",
+      "background": "charcoal",
+      "display_order": 0,
+      "eyebrow": "THE CORE COLLECTION / VOL. 01",
+      "heading": "LESS NOISE.\nMORE FOCUS.",
+      "heading_ar": "أقل ضوضاء.\nأكثر تركيزًا.",
+      "description": "Essentials that show up when you do.",
+      "description_ar": "قطع أساسية معاك في كل خطوة.",
+      "cta_label": "Discover the core collection",
+      "cta_label_ar": "اكتشف مجموعة كور",
+      "image_id": "e7010000-0000-4000-8000-000000000012"
+    },
+    "conflict": "id"
+  },
+  {
+    "table": "homepage_content",
+    "values": {
+      "id": "e7010000-0000-4000-8000-000000000406",
+      "section_id": "e7010000-0000-4000-8000-000000000305",
+      "cta_url": "/about",
+      "background": "red",
+      "display_order": 0,
+      "eyebrow": "MORE THAN A ROTATION",
+      "heading": "FOR THOSE WHO SHOW UP.",
+      "heading_ar": "للي بيختاروا يكملوا.",
+      "description": "From the first step to the final rep. Get to know the mindset behind EVOLVE.",
+      "description_ar": "من أول خطوة لآخر تكرار. اكتشف الفكرة وراء EVOLVE.",
+      "cta_label": "Our story",
+      "cta_label_ar": "قصة EVOLVE"
+    },
+    "conflict": "id"
+  },
+  {
+    "table": "homepage_content",
+    "values": {
+      "id": "e7010000-0000-4000-8000-000000000407",
+      "section_id": "e7010000-0000-4000-8000-000000000306",
+      "cta_url": "/shop",
+      "background": "ivory",
+      "display_order": 0,
+      "heading": "Made to move",
+      "heading_ar": "مصممة للحركة",
+      "description": "Fits that give you space to move your way.",
+      "description_ar": "قصات تسيب لك مساحة تتحرك بطريقتك."
+    },
+    "conflict": "id"
+  },
+  {
+    "table": "homepage_content",
+    "values": {
+      "id": "e7010000-0000-4000-8000-000000000408",
+      "section_id": "e7010000-0000-4000-8000-000000000306",
+      "cta_url": "/shop",
+      "background": "ivory",
+      "display_order": 1,
+      "heading": "Purpose in every detail",
+      "heading_ar": "كل تفصيلة لها هدف",
+      "description": "Clean lines and practical details, without the noise.",
+      "description_ar": "خطوط نظيفة وتفاصيل عملية بدون تعقيد."
+    },
+    "conflict": "id"
+  },
+  {
+    "table": "homepage_content",
+    "values": {
+      "id": "e7010000-0000-4000-8000-000000000409",
+      "section_id": "e7010000-0000-4000-8000-000000000306",
+      "cta_url": "/shop",
+      "background": "ivory",
+      "display_order": 2,
+      "heading": "Beyond the gym",
+      "heading_ar": "أبعد من الجيم",
+      "description": "A rotation that feels at home in and beyond the gym.",
+      "description_ar": "قطع تقدر تلبسها في النادي وخارجه."
+    },
+    "conflict": "id"
+  },
+  {
+    "table": "homepage_content",
+    "values": {
+      "id": "e7010000-0000-4000-8000-000000000410",
+      "section_id": "e7010000-0000-4000-8000-000000000307",
+      "cta_url": "/contact",
+      "background": "ivory",
+      "display_order": 0,
+      "eyebrow": "GOOD TO KNOW / FAQ",
+      "heading": "FAQ",
+      "description": "A few details to help you make your next move.",
+      "cta_label": "Contact us"
+    },
+    "conflict": "id"
+  },
+  {
+    "table": "faqs",
+    "values": {
+      "id": "e7010000-0000-4000-8000-000000000500",
+      "question": "How do I choose a size?",
+      "question_ar": "أختار المقاس إزاي؟",
+      "answer": "Check the size guide on the product page. Development measurements are illustrative until final garment specifications are supplied.",
+      "answer_ar": "راجع دليل المقاسات في صفحة المنتج. القياسات توضيحية لحد إضافة مواصفات القطع النهائية.",
+      "active": true,
+      "display_order": 0
+    },
+    "conflict": "id"
+  },
+  {
+    "table": "faqs",
+    "values": {
+      "id": "e7010000-0000-4000-8000-000000000501",
+      "question": "Can I place an order?",
+      "question_ar": "أقدر أعمل طلب؟",
+      "answer": "Checkout stays unavailable until the store owner enables it. Card payments are not supported by this installation.",
+      "answer_ar": "إتمام الطلب غير متاح لحد ما صاحب المتجر يفعله. النسخة الحالية لا تدعم الدفع بالبطاقات.",
+      "active": true,
+      "display_order": 1
+    },
+    "conflict": "id"
+  }
+]

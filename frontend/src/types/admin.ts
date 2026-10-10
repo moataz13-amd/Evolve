@@ -1,0 +1,31 @@
+export type Role = 'super_admin' | 'admin' | 'editor';
+export type Row = Record<string, any> & { id: string };
+export type Field = {
+  key: string;
+  label: string;
+  type?: 'text' | 'textarea' | 'number' | 'checkbox' | 'select' | 'datetime-local' | 'media';
+  required?: boolean;
+  options?: string[];
+  relation?: string;
+  min?: number;
+  max?: number;
+  step?: number;
+  showWhen?: { key: string; values: string[] };
+  advanced?: boolean;
+  defaultValue?: string | number | boolean | null;
+  help?: string;
+  placeholder?: string;
+  optionLabels?: Record<string, string>;
+};
+export type Resource = {
+  table: string;
+  title: string;
+  subtitle: string;
+  fields: Field[];
+  columns: string[];
+  search: string[];
+  managerOnly?: boolean;
+  superOnly?: boolean;
+  readOnly?: boolean;
+  order?: string;
+};

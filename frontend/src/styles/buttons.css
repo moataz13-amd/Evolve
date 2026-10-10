@@ -1,0 +1,62 @@
+.button,
+.detail-wishlist {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+.button::before,
+.detail-wishlist::before {
+  content: '';
+  position: absolute;
+  top: -15%;
+  left: -70%;
+  width: 65%;
+  height: 135%;
+  background: linear-gradient(135deg, #ffffff08, #ffffff40 60%, #ffffff18);
+  clip-path: polygon(
+    0 88%,
+    16% 50%,
+    39% 22%,
+    73% 0,
+    100% 3%,
+    67% 24%,
+    98% 18%,
+    67% 38%,
+    93% 35%,
+    64% 51%,
+    85% 51%,
+    58% 65%,
+    73% 68%,
+    44% 78%,
+    53% 84%,
+    26% 87%,
+    12% 100%
+  );
+  transform: translateX(0) rotate(-18deg) scaleY(0.7);
+  transform-origin: 12% 88%;
+  pointer-events: none;
+  z-index: -1;
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .button:hover:not(:disabled)::before,
+  .detail-wishlist:hover:not(:disabled)::before {
+    animation: button-wing-flight 650ms ease-in-out forwards;
+  }
+}
+@keyframes button-wing-flight {
+  0% {
+    transform: translateX(0) rotate(-18deg) scaleY(0.7);
+  }
+  30% {
+    transform: translateX(95%) rotate(12deg) scaleY(1);
+  }
+  55% {
+    transform: translateX(165%) rotate(-14deg) scaleY(0.55);
+  }
+  75% {
+    transform: translateX(225%) rotate(10deg) scaleY(1);
+  }
+  100% {
+    transform: translateX(290%) rotate(-10deg) scaleY(0.7);
+  }
+}

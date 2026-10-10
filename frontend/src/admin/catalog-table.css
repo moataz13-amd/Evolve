@@ -1,0 +1,316 @@
+.admin-catalog {
+  container: catalog / inline-size;
+  min-width: 0;
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  background: #fff;
+}
+.catalog-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 14px 16px;
+  font-size: 12px;
+  color: #72746f;
+}
+.catalog-toolbar strong {
+  color: #20231f;
+}
+.admin-root .catalog-mobile-selection {
+  display: none;
+}
+.admin-table.catalog-table {
+  width: 100%;
+  min-width: 0;
+  table-layout: fixed;
+}
+.admin-table.catalog-table th {
+  padding: 12px;
+  background: #f4f3ef;
+}
+.admin-table.catalog-table td {
+  min-width: 0;
+  padding: 14px 12px;
+  vertical-align: middle;
+  overflow-wrap: anywhere;
+}
+.catalog-table tbody tr {
+  transition: background 150ms ease;
+}
+.catalog-table tbody tr:hover {
+  background: #faf9f6;
+}
+.catalog-table tbody .catalog-row-selected {
+  background: #d9363607;
+}
+.catalog-select-column {
+  width: 42px;
+}
+.catalog-category-column {
+  width: 12%;
+}
+.catalog-price-column {
+  width: 14%;
+}
+.catalog-stock-column {
+  width: 8%;
+}
+.catalog-status-column {
+  width: 10%;
+}
+.catalog-featured-column {
+  width: 10%;
+}
+.catalog-actions-column {
+  width: 112px;
+}
+.catalog-table .admin-product-cell {
+  min-width: 0;
+  gap: 12px;
+}
+.catalog-table .admin-product-cell img {
+  width: 48px;
+  height: 60px;
+  border-radius: 6px;
+}
+.catalog-image-placeholder {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 48px;
+  height: 60px;
+  background: #f1f0eb;
+  border-radius: 6px;
+  color: #83867e;
+}
+.catalog-product-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+.catalog-product-copy strong {
+  font-size: 13px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+.catalog-product-copy small {
+  color: #868980;
+  font-size: 10px;
+}
+.catalog-sku {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #72746f;
+  font-size: 11px;
+  max-width: 100%;
+}
+.catalog-price strong,
+.catalog-stock {
+  font-variant-numeric: tabular-nums;
+}
+.catalog-stock {
+  font-weight: 600;
+}
+.catalog-stock-empty {
+  color: #b92d2d;
+}
+.catalog-featured {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #b92d2d;
+  font-size: 10px;
+  font-weight: 600;
+}
+.catalog-featured svg {
+  flex-shrink: 0;
+}
+.catalog-row-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+}
+.catalog-edit,
+.catalog-more {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  border: 1px solid #e5e3de;
+  border-radius: 5px;
+  background: #fff;
+  font-size: 11px;
+  color: #20231f;
+  transition:
+    border-color 150ms ease,
+    background 150ms ease;
+}
+.catalog-edit {
+  flex-shrink: 0;
+  white-space: nowrap;
+  padding: 0 10px;
+}
+.catalog-more {
+  width: 32px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.catalog-edit:hover,
+.catalog-more:hover {
+  border-color: #d93636;
+  background: #d9363608;
+}
+.catalog-manage-actions {
+  display: grid;
+  gap: 10px;
+}
+.catalog-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@container catalog (max-width: 820px) {
+  .catalog-table thead,
+  .catalog-table colgroup {
+    display: none;
+  }
+  .catalog-table,
+  .catalog-table tbody {
+    display: block;
+  }
+  .catalog-table tbody {
+    padding: 12px;
+  }
+  .catalog-table tbody tr {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    padding: 16px;
+    border: 1px solid #e5e3de;
+    border-radius: 7px;
+  }
+  .catalog-table tbody tr + tr {
+    margin-top: 12px;
+  }
+  .admin-table.catalog-table td {
+    display: block;
+    padding: 0;
+    border: 0;
+  }
+  .admin-table.catalog-table .catalog-product-check {
+    position: absolute;
+    top: 16px;
+    inset-inline-start: 16px;
+  }
+  .admin-table.catalog-table .catalog-product-identity {
+    grid-column: 1 / -1;
+    padding-inline: 30px 0;
+  }
+  .admin-table.catalog-table .catalog-product-actions {
+    grid-column: 1 / -1;
+    border-top: 1px solid #eee;
+    padding-top: 12px;
+  }
+  .catalog-field::before {
+    content: attr(data-label);
+    display: block;
+    color: #83867e;
+    font-size: 10px;
+    margin-bottom: 7px;
+  }
+  .catalog-row-actions {
+    justify-content: flex-start;
+  }
+  .catalog-edit,
+  .catalog-more {
+    min-height: 40px;
+  }
+  .catalog-more {
+    width: 40px;
+  }
+  .admin-root .catalog-mobile-selection {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 7px;
+  }
+}
+
+/* Keep the card layout available on browsers without container queries. */
+@media (max-width: 700px) {
+  .catalog-table thead,
+  .catalog-table colgroup {
+    display: none;
+  }
+  .catalog-table,
+  .catalog-table tbody {
+    display: block;
+  }
+  .catalog-table tbody {
+    padding: 12px;
+  }
+  .catalog-table tbody tr {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    padding: 16px;
+    border: 1px solid #e5e3de;
+    border-radius: 7px;
+  }
+  .catalog-table tbody tr + tr {
+    margin-top: 12px;
+  }
+  .admin-table.catalog-table td {
+    display: block;
+    padding: 0;
+    border: 0;
+  }
+  .admin-table.catalog-table .catalog-product-check {
+    position: absolute;
+    top: 16px;
+    inset-inline-start: 16px;
+  }
+  .admin-table.catalog-table .catalog-product-identity {
+    grid-column: 1 / -1;
+    padding-inline: 30px 0;
+  }
+  .admin-table.catalog-table .catalog-product-actions {
+    grid-column: 1 / -1;
+    border-top: 1px solid #eee;
+    padding-top: 12px;
+  }
+  .catalog-field::before {
+    content: attr(data-label);
+    display: block;
+    color: #83867e;
+    font-size: 10px;
+    margin-bottom: 7px;
+  }
+  .catalog-row-actions {
+    justify-content: flex-start;
+  }
+  .catalog-edit,
+  .catalog-more {
+    min-height: 40px;
+  }
+  .catalog-more {
+    width: 40px;
+  }
+  .admin-root .catalog-mobile-selection {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 7px;
+  }
+}

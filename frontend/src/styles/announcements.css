@@ -1,0 +1,43 @@
+.offer-announcement {
+  height: auto;
+  min-height: 32px;
+  padding: 5px 16px;
+  text-align: center;
+}
+.offer-announcement a {
+  display: block;
+  max-width: 100%;
+  color: inherit;
+  line-height: 1.6;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+.offer-announcement a:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+.offer-announcement span {
+  display: block;
+  animation: announcement-reveal 180ms ease-out;
+}
+@keyframes announcement-reveal {
+  from {
+    opacity: 0.35;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@media (max-width: 600px) {
+  .offer-announcement {
+    min-height: 36px;
+    font-size: 10px;
+    letter-spacing: 0.8px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .offer-announcement span {
+    animation: none;
+  }
+}

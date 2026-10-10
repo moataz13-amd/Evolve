@@ -1,0 +1,118 @@
+.home-faq {
+  display: grid;
+  grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.65fr);
+  gap: 6%;
+  align-items: center;
+  padding-block: 56px;
+  border-top: 1px solid #dfded8;
+  background: #efeeea;
+}
+.home-faq-intro h2 {
+  font-size: clamp(64px, 7vw, 104px);
+  line-height: 1.1;
+  font-weight: 500;
+  letter-spacing: -1.4px;
+  margin: 20px 0 14px;
+  max-width: 380px;
+}
+.home-faq-intro p {
+  font-size: 13px;
+  line-height: 1.8;
+  color: #686868;
+  max-width: 320px;
+}
+.home-faq-intro .button {
+  width: max-content;
+  min-width: 160px;
+  margin-top: 22px;
+}
+.home-faq-list details {
+  border-bottom: 1px solid #d4d2cc;
+}
+.home-faq-list details:first-child {
+  border-top: 1px solid #d4d2cc;
+}
+.home-faq-list summary {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 0;
+  cursor: pointer;
+  list-style: none;
+  font-size: 14px;
+  font-weight: 500;
+}
+.home-faq-list summary::-webkit-details-marker {
+  display: none;
+}
+.home-faq-list summary:hover {
+  color: var(--accent-hover);
+}
+.home-faq-number {
+  font-size: 10px;
+  color: #747474;
+  font-weight: 400;
+}
+.home-faq-toggle {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  margin-inline-start: auto;
+  border: 1px solid #d1cfc9;
+  border-radius: 50%;
+}
+.home-faq-toggle::before,
+.home-faq-toggle::after {
+  content: '';
+  position: absolute;
+  background: currentColor;
+  inset: 12px 8px;
+  height: 1px;
+}
+.home-faq-toggle::after {
+  transform: rotate(90deg);
+  transition: transform 160ms ease;
+}
+.home-faq-list details[open] .home-faq-toggle {
+  color: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+.home-faq-list details[open] .home-faq-toggle::after {
+  transform: rotate(0);
+}
+.home-faq-list details p {
+  padding-inline: 34px 46px;
+  margin: 0 0 24px;
+  font-size: 13px;
+  line-height: 1.9;
+  color: #626262;
+}
+.home-faq-list > .text-link {
+  width: max-content;
+  margin-top: 24px;
+}
+@media (max-width: 700px) {
+  .home-faq {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding-block: 40px;
+  }
+  .home-faq-intro h2 {
+    font-size: 64px;
+    max-width: 320px;
+  }
+  .home-faq-list summary {
+    font-size: 13px;
+    gap: 12px;
+    padding-block: 22px;
+  }
+  .home-faq-list details p {
+    padding-inline: 26px 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-faq-toggle::after {
+    transition: none;
+  }
+}

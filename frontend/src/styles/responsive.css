@@ -1,0 +1,173 @@
+/* Keep decorative overflow local, while preserving vertical scrolling and pinch zoom. */
+input[type='number'] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+html {
+  width: 100%;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+@supports (overflow: clip) {
+  html {
+    overflow-x: clip;
+  }
+}
+body,
+#root {
+  width: 100%;
+  min-width: 0;
+}
+.navigation-overlay {
+  overflow: hidden;
+}
+.section-title {
+  overflow-wrap: anywhere;
+}
+.detail-info,
+.product-gallery,
+.footer-top > div,
+.form-row > *,
+.account-layout > *,
+.contact-layout > *,
+.shop-layout > *,
+.admin-page-heading > *,
+.admin-hero-field-heading > * {
+  min-width: 0;
+}
+.breadcrumb,
+.product-meta h3,
+.cart-item-info,
+.shopper-profile-details dd,
+.footer-top a,
+.drawer-link {
+  overflow-wrap: anywhere;
+}
+.drawer-columns,
+.drawer-help {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.cart-item > div {
+  min-width: 0;
+}
+
+@media (max-width: 1000px) {
+  .section-title {
+    overflow: hidden;
+    padding-block-start: 0.22em;
+  }
+  header {
+    gap: 16px;
+  }
+  header > .logo {
+    width: clamp(96px, 18vw, 145px);
+  }
+  .header-actions {
+    flex-shrink: 0;
+  }
+  .admin-root input:not([type='checkbox']):not([type='file']),
+  .admin-root select,
+  .admin-root textarea {
+    font-size: 16px !important;
+  }
+}
+@media (max-width: 700px) {
+  header {
+    gap: 8px;
+    padding-inline: 4%;
+  }
+  header > .logo {
+    width: clamp(90px, 25vw, 130px);
+  }
+  .header-actions {
+    gap: clamp(4px, 1.5vw, 10px);
+  }
+  .header-actions .bag {
+    gap: 3px;
+  }
+  .hero h1,
+  html[dir='rtl'] .hero h1 {
+    font-size: clamp(40px, 11vw, 76px);
+  }
+  .hero-content {
+    min-width: 0;
+  }
+  .hero-content p {
+    overflow-wrap: anywhere;
+  }
+  .announcement {
+    padding-inline: 12px;
+    text-align: center;
+  }
+  .product-detail,
+  .account-layout,
+  .contact-layout,
+  .form-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .footer-top {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .category-hero h1,
+  .drop-hero h1,
+  html[dir='rtl'] .drop-hero h1,
+  html[dir='rtl'] .about-intro h1 {
+    font-size: clamp(38px, 11vw, 60px);
+    overflow-wrap: anywhere;
+  }
+  .store-form .button {
+    min-width: 0;
+    max-width: 100%;
+  }
+  input:not([type='checkbox']):not([type='radio']):not([type='file']),
+  select,
+  textarea {
+    font-size: 16px !important;
+    min-width: 0;
+    max-width: 100%;
+  }
+  .button {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+  .search-panel input {
+    flex: 1;
+    width: 0;
+    min-width: 0;
+  }
+  .cart {
+    min-width: 0;
+    padding: 22px 16px;
+  }
+}
+@media (max-width: 480px) {
+  .header-actions > .header-icon {
+    display: none;
+  }
+  .header-actions > button {
+    min-height: 36px;
+  }
+  .hero-content {
+    padding-inline: 6%;
+  }
+  .checkout-progress {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .admin-page-heading {
+    flex-wrap: wrap;
+  }
+  .admin-page-heading h1 {
+    font-size: clamp(28px, 9vw, 42px);
+    overflow-wrap: anywhere;
+  }
+  .admin-page-heading .admin-actions {
+    flex-wrap: wrap;
+  }
+}
