@@ -44,5 +44,8 @@ alter table public.homepage_content
   add column if not exists show_heading boolean not null default true,
   add column if not exists show_description boolean not null default true;
 
+alter table public.categories
+  add column if not exists show_page_title boolean not null default false;
+
 notify pgrst, 'reload schema';
 commit;

@@ -32,7 +32,13 @@ const editTitles = {
   Swimshorts: ['Swimshorts', 'شورتات سباحة'],
 };
 
-export default function ShopPage({ fixedCategory, fixedCollection, fixedTag, pageTitle }) {
+export default function ShopPage({
+  fixedCategory,
+  fixedCollection,
+  fixedTag,
+  pageTitle,
+  headingAs = 'h1',
+}) {
   const { isArabic } = useStore();
   const [areFiltersOpen, setAreFiltersOpen] = useState(false);
   const filters = useProductFilters(fixedCategory, fixedCollection, fixedTag);
@@ -59,7 +65,7 @@ export default function ShopPage({ fixedCategory, fixedCollection, fixedTag, pag
         <Link to="/">{isArabic ? 'الرئيسية' : 'Home'}</Link> / {isArabic ? 'المتجر' : 'Shop'}
       </div>
       <span className="eyebrow">YOUR EVERYDAY STARTS HERE.</span>
-      <SectionTitle as="h1">
+      <SectionTitle as={headingAs}>
         {filters.offerId
           ? selectedOffer
             ? offerAnnouncementText(selectedOffer, isArabic)

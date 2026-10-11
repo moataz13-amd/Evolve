@@ -1331,3 +1331,11 @@ grant execute on function private.catalog_tag_matches(public.products,text) to a
 notify pgrst, 'reload schema';
 commit;
 
+-- Migration: 202610110001_category_page_title.sql
+-- Let category editors decide whether its name appears on the category page.
+-- Existing categories default to a clean, image-only hero.
+alter table public.categories
+  add column if not exists show_page_title boolean not null default false;
+
+notify pgrst, 'reload schema';
+

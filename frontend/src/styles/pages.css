@@ -111,6 +111,12 @@
   object-position: 50% 35%;
   opacity: 0.58;
 }
+.category-hero--image-only > img {
+  opacity: 1;
+}
+.category-hero--image-only::after {
+  display: none;
+}
 .category-hero::after {
   content: '';
   position: absolute;

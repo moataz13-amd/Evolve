@@ -144,6 +144,10 @@ export const resources: Record<string, Resource> = {
       },
       area('description', 'Description'),
       image,
+      {
+        ...toggle('show_page_title', 'Show category name on its page'),
+        help: 'Off by default. The category name still appears on cards and in navigation.',
+      },
       active,
       ordered,
       extra(text('meta_title', 'SEO title')),

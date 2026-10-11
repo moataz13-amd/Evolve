@@ -38,24 +38,36 @@ export default function CategoryPage({ categoryOnly = false }) {
           <Link to="/shop">Shop all</Link>
         </section>
       );
+    const showPageTitle = !category || category.show_page_title === true;
     return (
       <>
         {item.media?.path && (
-          <section className="category-hero">
+          <section className={`category-hero${showPageTitle ? '' : ' category-hero--image-only'}`}>
             <img src={mediaUrl(item.media.path)} alt={item.name} width="1600" height="900" />
-            <div>
-              <SectionTitle as="h1">
-                {isArabic ? item.name_ar || item.name : item.name}
-              </SectionTitle>
-              <p>{item.description}</p>
-            </div>
+            {showPageTitle && (
+              <div>
+                <SectionTitle as="h1">
+                  {isArabic ? item.name_ar || item.name : item.name}
+                </SectionTitle>
+                <p>{item.description}</p>
+              </div>
+            )}
           </section>
         )}
         <Shop
           key={item.id}
           fixedCategory={category?.slug}
           fixedCollection={collection?.id}
-          pageTitle={isArabic ? item.name_ar || item.name : item.name}
+          headingAs={showPageTitle && item.media?.path ? 'h2' : 'h1'}
+          pageTitle={
+            category
+              ? isArabic
+                ? 'تسوق المجموعة'
+                : 'Shop the collection'
+              : isArabic
+                ? item.name_ar || item.name
+                : item.name
+          }
         />
       </>
     );
