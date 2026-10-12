@@ -7,11 +7,23 @@ import { useContent } from '../../context/ContentContext';
 import { useOrderQuote } from '../../hooks/useOrderQuote';
 import { OfferSavings } from '../checkout/OfferSavings';
 import { CartItem } from './CartItem';
+import { useCartStock } from '../../hooks/useCartStock';
+import { cartStockStatus } from '../../utils/cartStock';
 
 export function CartDrawer() {
   const { cart, cartCount, cartTotal, isCartOpen, closeCart, isArabic } = useStore();
   const { isDemo } = useContent();
-  const quote = useOrderQuote('', 'cairo', isCartOpen);
+  const stock = useCartStock(cart, isCartOpen && !isDemo);
+  const stockReady = isDemo || (stock.isSuccess && !stock.isFetching);
+  const hasUnavailableItems =
+    !isDemo &&
+    stockReady &&
+    cart.some((item) => {
+      const status = cartStockStatus(item, stock.data?.[item.variantId]);
+      return status.kind === 'out' || status.kind === 'exceeded';
+    });
+  const quote = useOrderQuote('', 'cairo', isCartOpen && stockReady && !hasUnavailableItems);
+  const canCheckout = isDemo || (stockReady && !hasUnavailableItems && quote.isSuccess);
   const panelRef = useRef(null);
   const closeRef = useRef(null);
 
@@ -79,20 +91,43 @@ export function CartDrawer() {
                   key={item.key}
                   item={item}
                   pricing={quote.data?.items?.find((line) => line.variant_id === item.variantId)}
+                  variant={stock.data?.[item.variantId]}
+                  stockReady={!isDemo && stockReady}
                 />
               ))}
             </div>
             <div className="cart-total">
               <OfferSavings quote={quote.data} />
+              {!isDemo && (stock.isPending || stock.isFetching) && (
+                <p role="status">
+                  {isArabic ? 'جارٍ التحقق من المخزون…' : 'Checking availability…'}
+                </p>
+              )}
+              {!isDemo && stock.isError && (
+                <p role="alert">
+                  {isArabic
+                    ? 'تعذر التحقق من المخزون الآن. حاول فتح الحقيبة مجددًا.'
+                    : 'Could not check availability. Please reopen your bag and try again.'}
+                </p>
+              )}
+              {hasUnavailableItems && (
+                <p role="alert">
+                  {isArabic
+                    ? 'راجع القطع غير المتوفرة أو قلل كميتها لإتمام الطلب.'
+                    : 'Remove unavailable items or reduce their quantity to check out.'}
+                </p>
+              )}
               {quote.isError && <p role="alert">{quote.error.message}</p>}
               <div>
                 <span>{isArabic ? 'الإجمالي' : 'Subtotal'}</span>
                 <strong>
-                  {quote.isFetching
-                    ? '…'
-                    : quote.isError
-                      ? '—'
-                      : formatMoney(quote.data?.subtotal ?? cartTotal)}
+                  {!isDemo && (!stockReady || hasUnavailableItems)
+                    ? '—'
+                    : quote.isFetching
+                      ? '…'
+                      : quote.isError
+                        ? '—'
+                        : formatMoney(quote.data?.subtotal ?? cartTotal)}
                 </strong>
               </div>
               <p>
@@ -104,13 +139,19 @@ export function CartDrawer() {
                     ? 'يتم تأكيد السعر والتوفر عند إتمام الطلب.'
                     : 'Price and availability are verified at checkout.'}
               </p>
-              <Link className="button button-primary" to="/checkout" onClick={closeCart}>
-                {isArabic
-                  ? isDemo
-                    ? 'إتمام الطلب التجريبي'
-                    : 'إتمام الطلب'
-                  : 'Continue to checkout'}
-              </Link>
+              {canCheckout ? (
+                <Link className="button button-primary" to="/checkout" onClick={closeCart}>
+                  {isArabic
+                    ? isDemo
+                      ? 'إتمام الطلب التجريبي'
+                      : 'إتمام الطلب'
+                    : 'Continue to checkout'}
+                </Link>
+              ) : (
+                <button className="button button-primary" disabled>
+                  {isArabic ? 'إتمام الطلب' : 'Continue to checkout'}
+                </button>
+              )}
             </div>
           </>
         ) : (
