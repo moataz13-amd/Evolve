@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { StoreContext } from './StoreContext';
 import { usePersistentState } from '../hooks/usePersistentState';
 import { useContent } from './ContentContext';
-import { useAuth } from './AuthContext';
 import { useQueryClient } from '@tanstack/react-query';
 import { createOrder } from '../services/orders.service';
 import {
@@ -23,7 +22,6 @@ export function StoreProvider({ children }) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { isDemo } = useContent();
-  const { session } = useAuth();
   const [isArabic, setIsArabic] = usePersistentState(storageKeys.language, false, isBoolean);
   const [cart, setCart] = usePersistentState(storageKeys.cart, [], isCart);
   const [wishlist, setWishlist] = usePersistentState(storageKeys.wishlist, [], isWishlist);
@@ -91,7 +89,6 @@ export function StoreProvider({ children }) {
     if (!cart.length) return;
 
     if (!isDemo) {
-      if (!session) throw new Error('Sign in before placing your order.');
       const id = await createOrder(cart, details, requestKey, promo);
       void queryClient.invalidateQueries();
       setCart([]);

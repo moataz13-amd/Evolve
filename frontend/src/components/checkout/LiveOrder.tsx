@@ -2,8 +2,10 @@ import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { database, mediaUrl } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
+import { useStore } from '../../context/StoreContext';
 export function LiveOrder({ id }: { id: string }) {
-  const { session } = useAuth();
+  const { session, loading } = useAuth();
+  const { isArabic } = useStore();
   const query = useQuery({
     queryKey: ['customer', 'order', id, session?.user.id],
     queryFn: async () => {
@@ -17,11 +19,19 @@ export function LiveOrder({ id }: { id: string }) {
     },
     enabled: !!session,
   });
+  if (loading)
+    return (
+      <section className="section loading" role="status">
+        {isArabic ? 'جارٍ تحميل الطلب…' : 'Loading your order…'}
+      </section>
+    );
   if (!session)
     return (
       <section className="section empty">
-        <h1>Sign in to view your order.</h1>
-        <Link to="/account">Sign in</Link>
+        <h1>
+          {isArabic ? 'الطلب غير متاح على هذا الجهاز.' : 'Order unavailable in this browser.'}
+        </h1>
+        <Link to="/shop">{isArabic ? 'متابعة التسوق' : 'Continue shopping'}</Link>
       </section>
     );
   if (query.isPending)
@@ -39,6 +49,7 @@ export function LiveOrder({ id }: { id: string }) {
       </section>
     );
   const order = query.data;
+  const isGuest = session.user.is_anonymous;
   return (
     <section className="section confirmation">
       <span className="eyebrow">EVOLVE / #{order.order_number}</span>
@@ -47,6 +58,13 @@ export function LiveOrder({ id }: { id: string }) {
         Status: {order.status}. Payment: {order.payment_status}. No card has been charged by this
         checkout.
       </p>
+      {isGuest && (
+        <p>
+          {isArabic
+            ? 'احتفظ برقم الطلب. تقدر تشوف الطلب من نفس المتصفح طول ما جلسة الضيف موجودة.'
+            : 'Save your order number. This guest order remains available in this browser while the guest session is active.'}
+        </p>
+      )}
       <div className="confirmation-products">
         {order.order_items.map((item: any) => (
           <div key={item.id}>

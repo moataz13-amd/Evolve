@@ -2,7 +2,6 @@ import { Select } from '../Select';
 import { useStore } from '../../context/StoreContext';
 import { useContent } from '../../context/ContentContext';
 import { useAuth } from '../../context/AuthContext';
-import { Link } from 'react-router-dom';
 import { governorates } from '../../data/governorates';
 export function CheckoutDetailsForm({
   details,
@@ -39,11 +38,6 @@ export function CheckoutDetailsForm({
               : 'Add your delivery details, then review your order.'}
         </p>
       </div>
-      {!isDemo && !session && (
-        <Link className="text-link" to="/account">
-          {isArabic ? 'سجّل الدخول لإتمام الطلب' : 'Sign in before checkout'}
-        </Link>
-      )}
       <div className="form-row">
         <label>
           {isArabic ? 'الاسم' : 'Name'}
@@ -69,9 +63,11 @@ export function CheckoutDetailsForm({
             dir="ltr"
             placeholder={isDemo ? 'demo@example.com' : 'Email'}
             defaultValue={
-              isDemo ? details?.email || profile?.email || '' : session?.user.email || ''
+              details?.email ||
+              (isDemo ? profile?.email : session?.user.is_anonymous ? '' : session?.user.email) ||
+              ''
             }
-            readOnly={!isDemo}
+            readOnly={!isDemo && !!session && !session.user.is_anonymous}
             autoComplete={isDemo ? 'off' : 'email'}
           />
         </label>
@@ -147,7 +143,7 @@ export function CheckoutDetailsForm({
           />
         </label>
       )}
-      <button type="submit" className="button button-primary" disabled={!isDemo && !session}>
+      <button type="submit" className="button button-primary">
         {isArabic ? 'مراجعة الطلب' : isDemo ? 'Review your demo order' : 'Review your order'}
       </button>
     </form>

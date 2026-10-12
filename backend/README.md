@@ -2,6 +2,8 @@
 
 The backend runs on Supabase: PostgreSQL, Auth and Storage. Trusted commerce functions, RLS policies and schema changes live in `supabase/migrations`. Browser API calls belong to `../frontend/src/services`.
 
+Guest checkout uses Supabase anonymous sign-ins. Apply `supabase/migrations/202610130001_guest_checkout_quantity.sql` to an existing store before enabling anonymous sign-ins in Supabase Auth. The migration keeps guest orders tied to the temporary user session, validates the supplied email, and retains transactional stock checks. Guest order history is available only while that browser session remains active. For local development, `supabase/config.toml` enables anonymous sign-ins.
+
 Cloudinary media uploads run through `supabase/functions/cloudinary-media`. The function validates the user's Supabase session and active admin role, signs Cloudinary requests on the server, and writes media URLs with the caller's RLS permissions. API secrets stay in backend environment variables and deployed Edge Function secrets. Existing Supabase images remain supported. See [Cloudinary setup](../docs/CLOUDINARY_SETUP_AR.md) for environment variables and deployment commands; no additional SQL migration is required.
 
 Set `SUPABASE_PROJECT_REF` and, if required by the CLI, `SUPABASE_DB_PASSWORD` in the local `.env`. The optional `SUPABASE_SERVICE_ROLE_KEY` is used only by the Node homepage restoration tool; migration commands and browser code do not use it. Never place this credential in the frontend or a `VITE_` variable. Configuration is in `supabase/config.toml`.

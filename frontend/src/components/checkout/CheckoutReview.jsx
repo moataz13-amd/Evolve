@@ -3,14 +3,11 @@ import { Check } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { useState, useRef } from 'react';
 import { useContent } from '../../context/ContentContext';
-import { useAuth } from '../../context/AuthContext';
-import { Link } from 'react-router-dom';
 import { useOrderQuote } from '../../hooks/useOrderQuote';
 import { governorateName } from '../../data/governorates';
 export function CheckoutReview({ details, onEdit, promo = '' }) {
   const { isArabic, placeOrder } = useStore();
   const { isDemo } = useContent();
-  const { session } = useAuth();
   const [pending, setPending] = useState(false);
   const [error, setError] = useState('');
   const requestKey = useRef(null);
@@ -62,17 +59,10 @@ export function CheckoutReview({ details, onEdit, promo = '' }) {
           </p>
         </div>
       </div>
-      {!isDemo && !session && (
-        <Link className="text-link" to="/account">
-          {isArabic ? 'سجّل الدخول لإتمام الطلب' : 'Sign in to place your order'}
-        </Link>
-      )}
       {error && <p role="alert">{error}</p>}
       <button
         className="button button-primary"
-        disabled={
-          pending || (!isDemo && (!session || !quote.data || quote.isError || quote.isFetching))
-        }
+        disabled={pending || (!isDemo && (!quote.data || quote.isError || quote.isFetching))}
         onClick={async () => {
           setPending(true);
           setError('');

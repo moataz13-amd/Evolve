@@ -43,7 +43,7 @@ export function ShopperAccount() {
     <AccountProfile
       isArabic={isArabic}
       name={query.data?.name || session.user.user_metadata?.name || ''}
-      email={session.user.email || ''}
+      email={session.user.email || query.data?.email || ''}
       phone={query.data?.phone || ''}
       orders={query.data?.orders || []}
       loading={query.isPending}

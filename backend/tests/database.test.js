@@ -830,6 +830,103 @@ test('commerce migrations enforce roles, trusted totals, stock and order isolati
       8,
       'seed is repeatable',
     );
+    await db.exec(
+      await readFile(
+        new URL('../supabase/migrations/202610130001_guest_checkout_quantity.sql', import.meta.url),
+        'utf8',
+      ),
+    );
+    const guestId = crypto.randomUUID();
+    await db.query('insert into auth.users(id,email) values($1,null)', [guestId]);
+    assert.equal(
+      (await db.query('select count(*)::int as n from public.customers where id=$1', [guestId]))
+        .rows[0].n,
+      0,
+      'anonymous signup waits for the guest checkout email',
+    );
+    await identity('authenticated', ids.admin);
+    await db.query('select public.adjust_inventory($1,$2,$3)', [
+      ids.variant,
+      140,
+      'Guest checkout test stock',
+    ]);
+    assert.equal(
+      (await db.query('select stock from public.product_variants where id=$1', [ids.variant]))
+        .rows[0].stock,
+      150,
+    );
+    assert.deepEqual(
+      (
+        await db.query(
+          'select v.active variant_active,p.active product_active,p.archived from public.product_variants v join public.products p on p.id=v.product_id where v.id=$1',
+          [ids.variant],
+        )
+      ).rows[0],
+      { variant_active: true, product_active: true, archived: false },
+    );
+    await identity('anon');
+    await assert.rejects(
+      db.query('select public.prepare_guest_checkout($1,$2)', ['Guest', 'guest@example.com']),
+      /permission denied/,
+    );
+    await identity('authenticated', guestId);
+    await db.query("select set_config('request.jwt.claims',$1,false)", [
+      JSON.stringify({ sub: guestId, is_anonymous: true }),
+    ]);
+    await assert.rejects(
+      db.query('select public.prepare_guest_checkout($1,$2)', ['Guest', 'invalid-email']),
+      /valid email/,
+    );
+    await db.query('select public.prepare_guest_checkout($1,$2)', ['Guest', 'guest@example.com']);
+    const largeItems = JSON.stringify([{ variant_id: ids.variant, quantity: 120 }]);
+    const quoteDefinition = (
+      await db.query(
+        "select pg_get_functiondef('public.quote_order(jsonb,text,text)'::regprocedure) definition",
+      )
+    ).rows[0].definition;
+    assert.equal(quoteDefinition.includes('item.qty not between 1 and 100'), false);
+    const largeQuote = (
+      await db.query('select public.quote_order($1,$2,$3) as quote', [largeItems, null, 'cairo'])
+    ).rows[0].quote;
+    assert.equal(
+      Number(largeQuote.subtotal),
+      3200,
+      'quote accepts quantities above 100 and applies offers',
+    );
+    const guestOrder = (
+      await db.query('select public.create_order($1,$2,$3,$4) as id', [
+        largeItems,
+        JSON.stringify({
+          name: 'Guest',
+          address: 'Test street',
+          city: 'Cairo',
+          country: 'Egypt',
+          governorate: 'cairo',
+        }),
+        crypto.randomUUID(),
+        null,
+      ])
+    ).rows[0].id;
+    assert.equal(
+      (await db.query('select email from public.orders where id=$1', [guestOrder])).rows[0].email,
+      'guest@example.com',
+    );
+    await assert.rejects(
+      db.query('select public.quote_order($1,$2,$3)', [
+        JSON.stringify([{ variant_id: ids.variant, quantity: 31 }]),
+        null,
+        'cairo',
+      ]),
+      /insufficient stock/,
+    );
+    await identity('authenticated', ids.other);
+    assert.equal(
+      (await db.query('select count(*)::int as n from public.orders where id=$1', [guestOrder]))
+        .rows[0].n,
+      0,
+      'other customers cannot access guest orders',
+    );
+    await db.exec('reset role');
   } finally {
     await db.close();
   }

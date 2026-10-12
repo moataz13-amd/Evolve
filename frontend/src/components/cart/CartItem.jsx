@@ -10,7 +10,6 @@ export function CartItem({ item, pricing, variant, stockReady }) {
   const [quantityInput, setQuantityInput] = useState(String(item.qty));
   const [quantityError, setQuantityError] = useState(false);
   const stock = stockReady ? cartStockStatus(item, variant) : null;
-  const maxQuantity = stock?.remaining;
   const isOut = stock?.kind === 'out';
 
   useEffect(() => {
@@ -26,7 +25,7 @@ export function CartItem({ item, pricing, variant, stockReady }) {
       setQuantityError(false);
       return;
     }
-    if (maxQuantity !== null && maxQuantity !== undefined && quantity > maxQuantity) {
+    if (!Number.isSafeInteger(quantity) || quantity > 2147483647) {
       setQuantityError(true);
       return;
     }
@@ -35,12 +34,11 @@ export function CartItem({ item, pricing, variant, stockReady }) {
   }
 
   function finishQuantity() {
-    if (quantityError && maxQuantity > 0) {
-      updateQuantity(item.key, maxQuantity);
-      setQuantityInput(String(maxQuantity));
-    } else {
-      setQuantityInput(String(item.qty));
+    if (quantityInput === '0') {
+      removeFromCart(item.key);
+      return;
     }
+    setQuantityInput(String(item.qty));
     setQuantityError(false);
   }
 
@@ -94,7 +92,7 @@ export function CartItem({ item, pricing, variant, stockReady }) {
             pattern="[0-9]*"
             value={quantityInput}
             aria-label={isArabic ? `عدد قطع ${item.ar || item.name}` : `Quantity of ${item.name}`}
-            aria-invalid={quantityError}
+            aria-invalid={quantityError || stock?.kind === 'exceeded'}
             disabled={isOut}
             onChange={(event) => changeQuantity(event.target.value)}
             onBlur={finishQuantity}
@@ -108,7 +106,9 @@ export function CartItem({ item, pricing, variant, stockReady }) {
             }
             disabled={
               isOut ||
-              (maxQuantity !== null && maxQuantity !== undefined && item.qty >= maxQuantity)
+              (stock?.remaining !== null &&
+                stock?.remaining !== undefined &&
+                item.qty >= stock.remaining)
             }
             onClick={() => updateQuantity(item.key, item.qty + 1)}
           >
@@ -117,9 +117,7 @@ export function CartItem({ item, pricing, variant, stockReady }) {
         </div>
         {quantityError && (
           <p className="cart-stock cart-stock-out" role="alert">
-            {isArabic
-              ? `الحد الأقصى المتاح ${maxQuantity} قطع.`
-              : `Maximum available: ${maxQuantity}.`}
+            {isArabic ? 'ادخل عددًا صحيحًا صالحًا.' : 'Enter a valid whole number.'}
           </p>
         )}
         <button className="remove" onClick={() => removeFromCart(item.key)}>
