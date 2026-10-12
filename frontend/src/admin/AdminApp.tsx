@@ -11,6 +11,7 @@ const ProductEditor = lazy(() => import('./pages/ProductEditorPage'));
 const OrderDetail = lazy(() => import('./pages/OrderDetailPage'));
 const Customer = lazy(() => import('./pages/CustomerPage'));
 const Inventory = lazy(() => import('./pages/InventoryPage'));
+const InventoryCatalog = lazy(() => import('./pages/InventoryCatalogPage'));
 const Media = lazy(() => import('./pages/MediaPage'));
 const Products = lazy(() => import('./pages/ProductsPage'));
 const SectionEditor = lazy(() => import('./pages/SectionEditorPage'));
@@ -32,8 +33,9 @@ export default function AdminApp() {
             <Route path="offers/:id" element={<OfferEditor />} />
             <Route path="search" element={<Search />} />
             <Route path="products" element={<Products />} />
+            <Route path="inventory" element={<InventoryCatalog />} />
             {Object.keys({ ...resources, ...commerceResources })
-              .filter((key) => key !== 'products')
+              .filter((key) => key !== 'products' && key !== 'inventory')
               .map((key) => (
                 <Route key={key} path={key} element={<Resource resourceKey={key} />} />
               ))}
