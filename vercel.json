@@ -16,12 +16,24 @@
         {
           "key": "Referrer-Policy",
           "value": "strict-origin-when-cross-origin"
-        },
-        {
-          "key": "X-Frame-Options",
-          "value": "DENY"
         }
       ]
+    },
+    {
+      "source": "/admin/:path*",
+      "headers": [{ "key": "X-Frame-Options", "value": "DENY" }]
+    },
+    {
+      "source": "/account",
+      "headers": [{ "key": "X-Frame-Options", "value": "DENY" }]
+    },
+    {
+      "source": "/checkout",
+      "headers": [{ "key": "X-Frame-Options", "value": "DENY" }]
+    },
+    {
+      "source": "/order/:path*",
+      "headers": [{ "key": "X-Frame-Options", "value": "DENY" }]
     }
   ],
   "buildCommand": "npm run build",

@@ -23,6 +23,32 @@ export default function App() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname, search]);
+  const isEmbedded = window.self !== window.top;
+  const isPrivatePage =
+    pathname === '/admin' ||
+    pathname.startsWith('/admin/') ||
+    pathname === '/account' ||
+    pathname === '/checkout' ||
+    pathname === '/order' ||
+    pathname.startsWith('/order/');
+
+  if (isEmbedded && isPrivatePage) {
+    return (
+      <main className="section empty">
+        <h1>Continue on EVOLVE</h1>
+        <p>Open this page in a new tab to access your account or complete your order.</p>
+        <a
+          className="button button-primary"
+          href={window.location.href}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Open EVOLVE
+        </a>
+      </main>
+    );
+  }
+
   if (pathname === '/admin' || pathname.startsWith('/admin/')) {
     return (
       <Suspense fallback={<div className="loading">Loading EVOLVE operations…</div>}>
