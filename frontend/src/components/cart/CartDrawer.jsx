@@ -8,7 +8,7 @@ import { useOrderQuote } from '../../hooks/useOrderQuote';
 import { OfferSavings } from '../checkout/OfferSavings';
 import { CartItem } from './CartItem';
 import { useCartStock } from '../../hooks/useCartStock';
-import { cartStockStatus } from '../../utils/cartStock';
+import { cartStockStatus, singleLineQuantityOffer } from '../../utils/cartStock';
 
 export function CartDrawer() {
   const { cart, cartCount, cartTotal, isCartOpen, closeCart, isArabic } = useStore();
@@ -19,7 +19,11 @@ export function CartDrawer() {
     !isDemo &&
     stockReady &&
     cart.some((item) => {
-      const status = cartStockStatus(item, stock.data?.[item.variantId]);
+      const status = cartStockStatus(
+        item,
+        stock.data?.[item.variantId],
+        singleLineQuantityOffer(cart, item),
+      );
       return status.kind === 'out' || status.kind === 'exceeded';
     });
   const quote = useOrderQuote('', 'cairo', isCartOpen && stockReady && !hasUnavailableItems);
@@ -92,6 +96,7 @@ export function CartDrawer() {
                   item={item}
                   pricing={quote.data?.items?.find((line) => line.variant_id === item.variantId)}
                   variant={stock.data?.[item.variantId]}
+                  offer={singleLineQuantityOffer(cart, item)}
                   stockReady={!isDemo && stockReady}
                 />
               ))}

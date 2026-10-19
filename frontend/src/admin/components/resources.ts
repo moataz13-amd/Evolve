@@ -89,7 +89,7 @@ export const resources: Record<string, Resource> = {
         max: 100,
         defaultValue: 1,
         showWhen: { key: 'discount_type', values: ['buy_get'] },
-        help: 'Buy 2 + get 1 requires 3 eligible pieces in the bag. The cheapest pieces are free. Sizes and colors can be mixed.',
+        help: 'Customers enter the paid quantity. Buy 2 + get 1 automatically adds one free piece from the same available stock. Eligible sizes and colors can be mixed.',
       },
       active,
       { ...toggle('show_badge', 'Show offer badge on product cards'), defaultValue: true },

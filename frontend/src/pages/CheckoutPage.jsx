@@ -10,7 +10,7 @@ import { useStore } from '../context/StoreContext';
 import { PageIntro } from '../components/PageIntro';
 import { useContent } from '../context/ContentContext';
 import { useCartStock } from '../hooks/useCartStock';
-import { cartStockStatus } from '../utils/cartStock';
+import { cartStockStatus, singleLineQuantityOffer } from '../utils/cartStock';
 
 const checkoutSteps = { details: 'details', review: 'review' };
 
@@ -18,12 +18,19 @@ export default function CheckoutPage() {
   const { isArabic, cart, openCart } = useStore();
   const { isDemo, data, loading, error, retry } = useContent();
   const stock = useCartStock(cart, !isDemo && cart.length > 0);
-  const unavailable =
-    stock.isSuccess &&
-    cart.some((item) => {
-      const status = cartStockStatus(item, stock.data?.[item.variantId]);
-      return status.kind === 'out' || status.kind === 'exceeded';
-    });
+  const unavailableItem = stock.isSuccess
+    ? cart
+        .map((item) => ({
+          item,
+          status: cartStockStatus(
+            item,
+            stock.data?.[item.variantId],
+            singleLineQuantityOffer(cart, item),
+          ),
+        }))
+        .find(({ status }) => status.kind === 'out' || status.kind === 'exceeded')
+    : null;
+  const unavailable = Boolean(unavailableItem);
   const [promo, setPromo] = useState('');
   const [currentStep, setCurrentStep] = useState(checkoutSteps.details);
   const [details, setDetails] = useState(null);
@@ -76,9 +83,13 @@ export default function CheckoutPage() {
         </h1>
         {unavailable && (
           <p>
-            {isArabic
-              ? 'بعض القطع نفدت أو الكمية المطلوبة أكبر من المتاح.'
-              : 'Some items are sold out or exceed the available stock.'}
+            {unavailableItem.status.maxPaid !== undefined
+              ? isArabic
+                ? `المتاح ${unavailableItem.status.remaining} قطعة. اطلب ${unavailableItem.status.maxPaid} مدفوعة كحد أقصى وخد ${unavailableItem.status.maxGift} هدية.`
+                : `${unavailableItem.status.remaining} pieces available. Order up to ${unavailableItem.status.maxPaid} paid pieces and get ${unavailableItem.status.maxGift} free.`
+              : isArabic
+                ? 'بعض القطع نفدت أو الكمية المطلوبة أكبر من المتاح.'
+                : 'Some items are sold out or exceed the available stock.'}
           </p>
         )}
         <button

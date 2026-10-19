@@ -33,13 +33,13 @@ export function OrderSummary({ promo = '', onPromoChange, governorate = 'cairo' 
             <div>
               <strong>{isArabic ? item.ar : item.name}</strong>
               <p>
-                {item.color} / {item.size} · ×{item.qty}
+                {item.color} / {item.size} · {item.qty} {isArabic ? 'مدفوعة' : 'paid'}
               </p>
               {!!pricing?.free_quantity && (
                 <small className="offer-gift">
                   {isArabic
-                    ? `منها ${pricing.free_quantity} هدية`
-                    : `${pricing.free_quantity} free`}
+                    ? `+ ${pricing.free_quantity} هدية · ${pricing.quantity} قطعة إجمالًا`
+                    : `+ ${pricing.free_quantity} free · ${pricing.quantity} pieces total`}
                 </small>
               )}
             </div>

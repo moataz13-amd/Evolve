@@ -5,11 +5,11 @@ import { useStore } from '../../context/StoreContext';
 import { formatMoney } from '../../utils/format';
 import { cartStockStatus } from '../../utils/cartStock';
 
-export function CartItem({ item, pricing, variant, stockReady }) {
+export function CartItem({ item, pricing, variant, offer, stockReady }) {
   const { isArabic, closeCart, updateQuantity, removeFromCart } = useStore();
   const [quantityInput, setQuantityInput] = useState(String(item.qty));
   const [quantityError, setQuantityError] = useState(false);
-  const stock = stockReady ? cartStockStatus(item, variant) : null;
+  const stock = stockReady ? cartStockStatus(item, variant, offer) : null;
   const isOut = stock?.kind === 'out';
 
   useEffect(() => {
@@ -53,11 +53,11 @@ export function CartItem({ item, pricing, variant, stockReady }) {
           {item.color} / {item.size}
         </p>
         <strong>{formatMoney(pricing?.unit_price ?? item.price)}</strong>
-        {!!pricing?.free_quantity && (
+        {!!(pricing?.free_quantity ?? stock?.gift) && (
           <p className="offer-gift">
             {isArabic
-              ? `منها ${pricing.free_quantity} هدية`
-              : `${pricing.free_quantity} free in this line`}
+              ? `${item.qty} مدفوعة + ${pricing?.free_quantity ?? stock.gift} هدية من نفس المخزون`
+              : `${item.qty} paid + ${pricing?.free_quantity ?? stock.gift} free from the same stock`}
           </p>
         )}
         {stock?.kind === 'out' && (
@@ -73,7 +73,13 @@ export function CartItem({ item, pricing, variant, stockReady }) {
               ? `باقي ${stock.remaining} قطع فقط من هذا المقاس واللون.`
               : `Only ${stock.remaining} left in this size and color.`}
             {stock.kind === 'exceeded' &&
-              (isArabic ? ' قلل الكمية لإتمام الطلب.' : ' Reduce your quantity to check out.')}
+              (stock.maxPaid !== undefined
+                ? isArabic
+                  ? ` اطلب ${stock.maxPaid} كحد أقصى وخد ${stock.maxGift} هدية، بإجمالي ${stock.maxPaid + stock.maxGift} قطعة.`
+                  : ` Order at most ${stock.maxPaid} paid pieces and get ${stock.maxGift} free, ${stock.maxPaid + stock.maxGift} total.`
+                : isArabic
+                  ? ' قلل الكمية لإتمام الطلب.'
+                  : ' Reduce your quantity to check out.')}
           </p>
         )}
         <div className="quantity">
@@ -108,7 +114,7 @@ export function CartItem({ item, pricing, variant, stockReady }) {
               isOut ||
               (stock?.remaining !== null &&
                 stock?.remaining !== undefined &&
-                item.qty >= stock.remaining)
+                item.qty >= (stock.maxPaid ?? stock.remaining))
             }
             onClick={() => updateQuantity(item.key, item.qty + 1)}
           >

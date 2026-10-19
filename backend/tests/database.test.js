@@ -35,6 +35,12 @@ test('commerce migrations enforce roles, trusted totals, stock and order isolati
         throw new Error(`${file}: ${error.message}`, { cause: error });
       }
     }
+    await db.exec(
+      await readFile(
+        new URL('../supabase/migrations/202610200001_gifts_from_stock.sql', import.meta.url),
+        'utf8',
+      ),
+    );
     assert.equal(
       (
         await db.query(
@@ -340,7 +346,17 @@ test('commerce migrations enforce roles, trusted totals, stock and order isolati
     await db.exec('rollback');
     await db.exec('reset role');
     const offersSql = await readFile(new URL('../supabase/offers.sql', import.meta.url), 'utf8');
+    const quantitySql = await readFile(
+      new URL('../supabase/migrations/202610130001_guest_checkout_quantity.sql', import.meta.url),
+      'utf8',
+    );
+    const giftStockSql = await readFile(
+      new URL('../supabase/migrations/202610200001_gifts_from_stock.sql', import.meta.url),
+      'utf8',
+    );
     await db.exec(offersSql);
+    await db.exec(quantitySql);
+    await db.exec(giftStockSql);
     await identity('authenticated', ids.admin);
     const offerId = crypto.randomUUID();
     const cheaperId = crypto.randomUUID();
@@ -434,6 +450,8 @@ test('commerce migrations enforce roles, trusted totals, stock and order isolati
     );
     await db.exec('reset role');
     await db.exec(offersSql);
+    await db.exec(quantitySql);
+    await db.exec(giftStockSql);
     assert.equal(
       (await db.query('select count(*)::int n from offers')).rows[0].n,
       2,
@@ -452,13 +470,58 @@ test('commerce migrations enforce roles, trusted totals, stock and order isolati
           JSON.stringify([{ variant_id: ids.variant, quantity }]),
         ])
       ).rows[0].quote;
-    assert.equal(Number((await giftQuote(2)).subtotal), 80, 'no gift before the complete group');
+    assert.equal(Number((await giftQuote(1)).subtotal), 40, 'one paid piece earns no gift');
+    const two = await giftQuote(2);
+    assert.equal(Number(two.subtotal), 80);
+    assert.equal(two.items[0].paid_quantity, 2);
+    assert.equal(two.items[0].quantity, 3);
+    assert.equal(two.items[0].free_quantity, 1);
     const three = await giftQuote(3);
-    assert.equal(Number(three.subtotal), 80);
+    assert.equal(Number(three.subtotal), 120);
     assert.equal(Number(three.offer_discount), 40);
     assert.equal(three.items[0].free_quantity, 1);
     assert.equal(three.applied_offers[0].free_quantity, 1);
-    assert.equal(Number((await giftQuote(6)).subtotal), 160, 'quantity offers repeat');
+    assert.equal(Number((await giftQuote(6)).subtotal), 240, 'quantity offers repeat');
+    await db.exec('begin');
+    await db.query('select public.adjust_inventory($1,1190,$2)', [
+      ids.variant,
+      'Test gift stock boundary',
+    ]);
+    const fullStock = await giftQuote(800);
+    assert.equal(fullStock.items[0].paid_quantity, 800);
+    assert.equal(fullStock.items[0].free_quantity, 400);
+    assert.equal(fullStock.items[0].quantity, 1200);
+    assert.equal(Number(fullStock.subtotal), 32000);
+    assert.equal((await giftQuote(799)).items[0].quantity, 1198);
+    await db.exec('savepoint gift_stock_limit');
+    await assert.rejects(giftQuote(801), /stock.*free gifts/i);
+    await db.exec('rollback to savepoint gift_stock_limit');
+    await assert.rejects(giftQuote(1200), /stock.*free gifts/i);
+    await db.exec('rollback to savepoint gift_stock_limit');
+    await identity('authenticated', ids.customer);
+    const fullStockOrder = (
+      await db.query('select public.create_order($1,$2,$3,$4) id', [
+        JSON.stringify([{ variant_id: ids.variant, quantity: 800 }]),
+        details,
+        crypto.randomUUID(),
+        null,
+      ])
+    ).rows[0].id;
+    assert.deepEqual(
+      (
+        await db.query('select quantity,free_quantity from order_items where order_id=$1', [
+          fullStockOrder,
+        ])
+      ).rows[0],
+      { quantity: 1200, free_quantity: 400 },
+    );
+    assert.equal(
+      (await db.query('select stock from product_variants where id=$1', [ids.variant])).rows[0]
+        .stock,
+      0,
+    );
+    await db.exec('rollback');
+    await identity('authenticated', ids.admin);
     const split = (
       await db.query('select public.quote_order($1) quote', [
         JSON.stringify([
@@ -484,19 +547,19 @@ test('commerce migrations enforce roles, trusted totals, stock and order isolati
         [giftOrder],
       )
     ).rows[0];
-    assert.equal(giftCaptured.quantity, 3);
+    assert.equal(giftCaptured.quantity, 4);
     assert.equal(giftCaptured.free_quantity, 1);
     assert.equal(Number(giftCaptured.unit_price), 40);
     assert.equal(
       Number(
         (await db.query('select subtotal from orders where id=$1', [giftOrder])).rows[0].subtotal,
       ),
-      80,
+      120,
     );
     assert.equal(
       (await db.query('select stock from product_variants where id=$1', [ids.variant])).rows[0]
         .stock,
-      7,
+      6,
       'gifts consume real inventory',
     );
     await identity('authenticated', ids.admin);
@@ -549,13 +612,30 @@ test('commerce migrations enforce roles, trusted totals, stock and order isolati
         ]),
       ])
     ).rows[0].quote;
-    assert.equal(Number(mixed.subtotal), 80);
+    assert.equal(Number(mixed.subtotal), 100);
     assert.equal(
       mixed.items.find((line) => line.variant_id === cheapVariant).free_quantity,
       1,
       'the cheapest eligible piece is free',
     );
     assert.equal(mixed.items.find((line) => line.variant_id === ids.variant).free_quantity, 0);
+    await db.query('select public.adjust_inventory($1,-9,$2)', [
+      cheapVariant,
+      'Leave no spare stock for a cheap gift',
+    ]);
+    const alternateGift = (
+      await db.query('select public.quote_order($1) quote', [
+        JSON.stringify([
+          { variant_id: ids.variant, quantity: 2 },
+          { variant_id: cheapVariant, quantity: 1 },
+        ]),
+      ])
+    ).rows[0].quote;
+    assert.equal(
+      alternateGift.items.find((line) => line.variant_id === ids.variant).free_quantity,
+      1,
+      'the gift moves to another selected variant when the cheaper variant has no spare stock',
+    );
     await db.exec('rollback');
     await identity('authenticated', ids.admin);
     await assert.rejects(
@@ -565,6 +645,8 @@ test('commerce migrations enforce roles, trusted totals, stock and order isolati
     await assert.rejects(giftQuote(11), /stock|available|quantity/i);
     await db.exec('reset role');
     await db.exec(offersSql);
+    await db.exec(quantitySql);
+    await db.exec(giftStockSql);
     await identity('authenticated', ids.admin);
     assert.equal(
       (await giftQuote(3)).items[0].free_quantity,
@@ -847,13 +929,13 @@ test('commerce migrations enforce roles, trusted totals, stock and order isolati
     await identity('authenticated', ids.admin);
     await db.query('select public.adjust_inventory($1,$2,$3)', [
       ids.variant,
-      140,
+      170,
       'Guest checkout test stock',
     ]);
     assert.equal(
       (await db.query('select stock from public.product_variants where id=$1', [ids.variant]))
         .rows[0].stock,
-      150,
+      180,
     );
     assert.deepEqual(
       (
@@ -890,8 +972,8 @@ test('commerce migrations enforce roles, trusted totals, stock and order isolati
     ).rows[0].quote;
     assert.equal(
       Number(largeQuote.subtotal),
-      3200,
-      'quote accepts quantities above 100 and applies offers',
+      4800,
+      'quote accepts 120 paid pieces plus 60 gifts within stock',
     );
     const guestOrder = (
       await db.query('select public.create_order($1,$2,$3,$4) as id', [

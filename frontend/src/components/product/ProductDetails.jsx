@@ -71,8 +71,8 @@ export function ProductDetails({ product, onOpenSizeGuide }) {
           <strong>{quantityOfferLabel(offer, isArabic)}</strong>
           <p>
             {isArabic
-              ? `أضف ${Number(offer.buy_quantity) + Number(offer.get_quantity)} قطع من منتجات العرض للسلة، بما فيها الهدية. أقل القطع سعرًا هدية، ويمكنك اختيار ألوان ومقاسات مختلفة.`
-              : `Add ${Number(offer.buy_quantity) + Number(offer.get_quantity)} eligible pieces, including the gift, to your bag. The cheapest pieces are free. Mix sizes and colors.`}
+              ? `اطلب ${offer.buy_quantity} قطع مدفوعة وخد ${offer.get_quantity} هدية من نفس المخزون. يمكن مزج المقاسات والألوان المتاحة.`
+              : `Order ${offer.buy_quantity} paid pieces and get ${offer.get_quantity} free from the same stock. Eligible sizes and colors can be mixed.`}
           </p>
         </div>
       ))}

@@ -78,9 +78,10 @@ export function LiveOrder({ id }: { id: string }) {
             )}
             <h3>{item.product_name}</h3>
             <small>
-              {item.size} / {item.color_name} ×{item.quantity}
+              {item.size} / {item.color_name} · {item.quantity - (item.free_quantity || 0)} paid
+              {!!item.free_quantity && ` + ${item.free_quantity} free`}
             </small>
-            {!!item.free_quantity && <p className="offer-gift">{item.free_quantity} free</p>}
+            {!!item.free_quantity && <p className="offer-gift">{item.quantity} pieces total</p>}
           </div>
         ))}
       </div>
