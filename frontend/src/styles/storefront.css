@@ -418,10 +418,11 @@ header {
     animation: none;
   }
 }
-.brand-strip i {
-  font-style: normal;
+.brand-strip-mark {
+  width: 23px;
+  height: 23px;
+  flex: none;
   color: var(--accent);
-  font-size: 23px;
 }
 .section {
   padding: 80px 5.5%;
