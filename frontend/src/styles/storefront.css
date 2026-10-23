@@ -313,8 +313,6 @@ header {
   outline: 2px solid #fff;
   outline-offset: 5px;
 }
-.hero-actions .hero-glass-button:active {
-}
 .button {
   display: flex;
   align-items: center;
@@ -368,8 +366,6 @@ header {
 .button:disabled {
   box-shadow: none;
 }
-[dir='rtl'] .button:hover:not(:disabled) > svg {
-}
 .hero-secondary {
   font-size: 13px;
   font-weight: 500;
@@ -390,8 +386,6 @@ header {
 .hero-secondary:hover {
   background: #ffffff14;
   border-color: #ffffff80;
-}
-.hero-secondary:active {
 }
 .hero-bottom {
   position: absolute;
