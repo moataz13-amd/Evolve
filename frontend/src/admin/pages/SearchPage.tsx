@@ -1,7 +1,8 @@
 import { Link, useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { database } from '../../lib/supabase';
-import { listRecords, throwIfError } from '../../services/admin.service';
+import { listRecords } from '../../services/admin.service';
+import { throwIfError } from '../../services/result';
 import { commerceResources } from '../components/resources';
 import { useAuth } from '../../context/AuthContext';
 import { PageHeader, LoadingSkeleton, ErrorState, EmptyState } from '../components/UI';

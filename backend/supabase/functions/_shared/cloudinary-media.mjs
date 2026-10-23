@@ -68,6 +68,22 @@ async function limitedFormData(request) {
   }
 }
 
+async function hasImageSignature(file) {
+  const bytes = new Uint8Array(await file.slice(0, 256).arrayBuffer());
+  if (file.type === 'image/jpeg')
+    return bytes.length >= 3 && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff;
+  if (file.type === 'image/png')
+    return [137, 80, 78, 71, 13, 10, 26, 10].every((byte, index) => bytes[index] === byte);
+  const text = (start, end) => String.fromCharCode(...bytes.slice(start, end));
+  if (file.type === 'image/webp')
+    return bytes.length >= 12 && text(0, 4) === 'RIFF' && text(8, 12) === 'WEBP';
+  if (file.type === 'image/avif' && bytes.length >= 16 && text(4, 8) === 'ftyp') {
+    for (let offset = 8; offset + 4 <= bytes.length; offset += 4)
+      if (['avif', 'avis'].includes(text(offset, offset + 4))) return true;
+  }
+  return false;
+}
+
 export function createMediaHandler(env, fetcher = fetch) {
   return async (request) => {
     const origin = request.headers.get('origin');
@@ -190,6 +206,8 @@ export function createMediaHandler(env, fetcher = fetch) {
       if (file.size > MAX_FILE_SIZE) throw new HttpError(413, 'Images must be smaller than 10 MB.');
       if (!['image/jpeg', 'image/png', 'image/webp', 'image/avif'].includes(file.type))
         throw new HttpError(400, 'Use JPEG, PNG, WebP or AVIF.');
+      if (!(await hasImageSignature(file)))
+        throw new HttpError(400, 'The image contents do not match its file type.');
       const publicId = `evolve/${folder}/${crypto.randomUUID()}`;
       const uploaded = await cloudinary('upload', { public_id: publicId, overwrite: false }, file);
       if (

@@ -58,10 +58,18 @@ function upload({
   type = 'image/webp',
   auth = true,
   origin = 'http://localhost:5173',
+  spoofContent = false,
 } = {}) {
   const body = new FormData();
   body.set('folder', folder);
-  body.set('file', new Blob(['sample'], { type }), 'training.webp');
+  const signatures = {
+    'image/jpeg': [255, 216, 255],
+    'image/png': [137, 80, 78, 71, 13, 10, 26, 10],
+    'image/webp': [82, 73, 70, 70, 4, 0, 0, 0, 87, 69, 66, 80],
+    'image/avif': [0, 0, 0, 20, 102, 116, 121, 112, 97, 118, 105, 102, 0, 0, 0, 0],
+  };
+  const contents = spoofContent ? 'This is not an image.' : new Uint8Array(signatures[type] || []);
+  body.set('file', new Blob([contents], { type }), 'training.webp');
   return new Request('https://store.test/functions/v1/cloudinary-media', {
     method: 'POST',
     body,
@@ -112,10 +120,22 @@ test('an editor can upload an image and register its URL using the caller JWT an
   assert.equal(dbCall.headers.apikey, 'public-key');
 });
 test('invalid folders and unsupported file formats are rejected before uploading', async () => {
-  for (const request of [upload({ folder: '../private' }), upload({ type: 'image/svg+xml' })]) {
+  for (const request of [
+    upload({ folder: '../private' }),
+    upload({ type: 'image/svg+xml' }),
+    upload({ spoofContent: true }),
+  ]) {
     const { run, calls } = fixture();
     assert.equal((await run(request)).status, 400);
     assert.equal(calls.filter((call) => call.url.includes('api.cloudinary.com')).length, 0);
+  }
+});
+
+test('supported image signatures remain uploadable', async () => {
+  for (const type of ['image/jpeg', 'image/png', 'image/webp', 'image/avif']) {
+    const { run, calls } = fixture();
+    assert.equal((await run(upload({ type }))).status, 201);
+    assert.equal(calls.filter((call) => call.url.endsWith('/image/upload')).length, 1);
   }
 });
 test('a failed metadata insert cleans up the newly uploaded image', async () => {

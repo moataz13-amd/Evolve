@@ -2,8 +2,10 @@ import { useState, type ChangeEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { database, mediaUrl } from '../../lib/supabase';
-import { options, saveRecord, throwIfError } from '../../services/admin.service';
+import { options, saveRecord } from '../../services/admin.service';
+import { throwIfError } from '../../services/result';
 import { hero } from '../../data/products';
+import { isSafeStorefrontPath } from '../../utils/storefrontLinks';
 import { MediaPicker } from '../components/MediaPicker';
 import { ErrorState, LoadingSkeleton, PageHeader } from '../components/UI';
 import type { Row } from '../../types/admin';
@@ -207,7 +209,7 @@ function HeroForm({ section }: { section: Row | null }) {
             setValidation('Enter a headline and button label.');
             return;
           }
-          if (!/^\/(?!\/)[^\s\\]*$/.test(values.cta_url)) {
+          if (!isSafeStorefrontPath(values.cta_url)) {
             setValidation('Use a valid store path starting with /, such as /shop.');
             return;
           }

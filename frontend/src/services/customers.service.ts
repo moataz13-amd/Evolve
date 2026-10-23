@@ -1,5 +1,5 @@
 import { database } from '../lib/supabase';
-import { throwIfError } from './admin.service';
+import { throwIfError } from './result';
 export async function customerDetails(id: string) {
   return throwIfError(
     await database()

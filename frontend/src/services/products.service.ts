@@ -1,6 +1,6 @@
 import { createUUID } from '../utils/uuid';
 import { database, mediaUrl } from '../lib/supabase';
-import { throwIfError } from './admin.service';
+import { throwIfError } from './result';
 import type { ProductRecord } from '../types/catalog';
 import { offerPrice, liveQuantityOffers, quantityOfferLabel } from '../utils/offers';
 export const productSelect =

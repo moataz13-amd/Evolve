@@ -1,6 +1,11 @@
 import { createClient } from '@supabase/supabase-js';
-const url = (import.meta.env.VITE_SUPABASE_URL || 'https://cyuarwdaxhfhnkojklnc.supabase.co')?.trim();
-const key = (import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5dWFyd2RheGhmaG5rb2prbG5jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEzOTg1NDAsImV4cCI6MjEwNjk3NDU0MH0.EjY39ACS8TOk89f7EbreJY9n3EBv63j22pY4zQsVQaw')?.trim();
+const url = (
+  import.meta.env.VITE_SUPABASE_URL || 'https://cyuarwdaxhfhnkojklnc.supabase.co'
+)?.trim();
+const key = (
+  import.meta.env.VITE_SUPABASE_ANON_KEY ||
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5dWFyd2RheGhmaG5rb2prbG5jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEzOTg1NDAsImV4cCI6MjEwNjk3NDU0MH0.EjY39ACS8TOk89f7EbreJY9n3EBv63j22pY4zQsVQaw'
+)?.trim();
 export const isConfigured = Boolean(url && key);
 export const demoMode =
   !isConfigured && import.meta.env.DEV && import.meta.env.VITE_DEMO_MODE !== 'false';

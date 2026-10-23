@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 import { useStore } from '../../context/StoreContext';
 import { photo } from '../../data/products';
+import { safeStorefrontPath } from '../../utils/storefrontLinks';
 
 export function CollectionBanner() {
   const { isArabic } = useStore();
@@ -41,7 +42,10 @@ export function CollectionBanner() {
               : 'Clean lines. Considered details.\nEssentials that show up when you do.'}
           </CmsText>
         </p>
-        <Link className="button button-primary" to={config?.cta_url || '/new-arrivals'}>
+        <Link
+          className="button button-primary"
+          to={safeStorefrontPath(config?.cta_url, '/new-arrivals')}
+        >
           <CmsText sectionKey="core_collection" field="cta_label">
             {isArabic ? 'اكتشف مجموعة كور' : 'Discover the core collection'}
           </CmsText>

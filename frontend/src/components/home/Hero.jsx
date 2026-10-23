@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 import { useStore } from '../../context/StoreContext';
 import { hero } from '../../data/products';
+import { safeStorefrontPath } from '../../utils/storefrontLinks';
 
 export function Hero() {
   const { isArabic } = useStore();
@@ -60,7 +61,7 @@ export function Hero() {
       <div className="hero-actions">
         <Link
           className="button hero-glass-button"
-          to={config?.cta_url || '/shop'}
+          to={safeStorefrontPath(config?.cta_url, '/shop')}
           lang={isArabic ? 'ar' : 'en'}
           dir={isArabic ? 'rtl' : 'ltr'}
         >

@@ -4,6 +4,7 @@ import { SectionTitle } from '../SectionTitle';
 import { Link } from 'react-router-dom';
 
 import { useStore } from '../../context/StoreContext';
+import { safeStorefrontPath } from '../../utils/storefrontLinks';
 
 export function BrandStory() {
   const { isArabic } = useStore();
@@ -29,7 +30,10 @@ export function BrandStory() {
                 : 'From the first step to the final rep. Get to know the mindset behind EVOLVE.'}
             </CmsText>
           </p>
-          <Link className="button button-primary" to={config?.cta_url || '/about'}>
+          <Link
+            className="button button-primary"
+            to={safeStorefrontPath(config?.cta_url, '/about')}
+          >
             <CmsText sectionKey="story" field="cta_label">
               {isArabic ? 'قصة EVOLVE' : 'Our story'}
             </CmsText>

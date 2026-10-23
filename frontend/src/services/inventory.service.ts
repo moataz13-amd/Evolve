@@ -1,6 +1,6 @@
 import { database, mediaUrl } from '../lib/supabase';
 import { summarizeInventory, type InventoryStock, type InventoryVariant } from '../utils/inventory';
-import { throwIfError } from './admin.service';
+import { throwIfError } from './result';
 
 export type InventoryProduct = {
   id: string;

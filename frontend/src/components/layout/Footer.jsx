@@ -4,6 +4,7 @@ import { useStore } from '../../context/StoreContext';
 import { BrandLogo } from '../BrandLogo';
 import { useContent } from '../../context/ContentContext';
 import { Newsletter } from '../Newsletter';
+import { safeSocialUrl } from '../../utils/storefrontLinks';
 export function Footer() {
   const { isArabic, toggleLanguage } = useStore();
   const { data, isDemo } = useContent();
@@ -73,10 +74,11 @@ export function Footer() {
             </>
           ) : (
             ['instagram', 'facebook', 'tiktok']
-              .filter((key) => /^https:\/\//.test(settings?.[key] || ''))
-              .map((key) => (
-                <a key={key} href={settings[key]} target="_blank" rel="noreferrer">
-                  {key}
+              .map((platform) => ({ platform, url: safeSocialUrl(settings?.[platform], platform) }))
+              .filter(({ url }) => url)
+              .map(({ platform, url }) => (
+                <a key={platform} href={url} target="_blank" rel="noopener noreferrer">
+                  {platform}
                 </a>
               ))
           )}

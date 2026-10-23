@@ -1,6 +1,6 @@
 import { createUUID } from '../utils/uuid';
 import { database } from '../lib/supabase';
-import { throwIfError } from './admin.service';
+import { throwIfError } from './result';
 import { optimizeImage } from '../utils/optimizeImage';
 import { cloudinaryRequest, isCloudinaryImage, usesCloudinary } from './cloudinary.service';
 export async function uploadImage(file: File, folder: string) {

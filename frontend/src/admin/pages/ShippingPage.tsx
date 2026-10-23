@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { database } from '../../lib/supabase';
-import { saveRecord, throwIfError } from '../../services/admin.service';
+import { saveRecord } from '../../services/admin.service';
+import { throwIfError } from '../../services/result';
 import { governorates } from '../../data/governorates';
 import { useAuth } from '../../context/AuthContext';
 import { PageHeader, LoadingSkeleton, ErrorState } from '../components/UI';

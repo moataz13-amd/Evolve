@@ -4,6 +4,7 @@ import { useStore } from '../../context/StoreContext';
 import { getFaqs } from '../../data/faqs';
 import { useContent } from '../../context/ContentContext';
 import { CmsText } from './CmsText';
+import { safeStorefrontPath } from '../../utils/storefrontLinks';
 
 export function Faq() {
   const { isArabic } = useStore();
@@ -35,7 +36,10 @@ export function Faq() {
               : 'A few details to help you make your next move.'}
           </CmsText>
         </p>
-        <Link className="button button-primary" to={config?.cta_url || '/contact'}>
+        <Link
+          className="button button-primary"
+          to={safeStorefrontPath(config?.cta_url, '/contact')}
+        >
           <CmsText sectionKey="faq" field="cta_label">
             {isArabic ? 'تواصل معنا' : 'Contact us'}
           </CmsText>

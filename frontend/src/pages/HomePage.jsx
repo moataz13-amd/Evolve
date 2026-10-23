@@ -11,6 +11,7 @@ import { useContent } from '../context/ContentContext';
 import { Link } from 'react-router-dom';
 import { mediaUrl } from '../lib/supabase';
 import { useStore } from '../context/StoreContext';
+import { safeStorefrontPath } from '../utils/storefrontLinks';
 export default function HomePage() {
   const { isDemo, data, loading } = useContent();
   const { isArabic } = useStore();
@@ -59,7 +60,10 @@ export default function HomePage() {
             )}
             <h2>{banner.title}</h2>
             <p>{banner.description}</p>
-            <Link className="button button-primary compact-button" to={banner.cta_url}>
+            <Link
+              className="button button-primary compact-button"
+              to={safeStorefrontPath(banner.cta_url)}
+            >
               {banner.cta_label}
             </Link>
           </section>

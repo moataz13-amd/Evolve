@@ -1,5 +1,5 @@
 import { database } from '../lib/supabase';
-import { throwIfError } from './admin.service';
+import { throwIfError } from './result';
 import { productSelect, toStoreProduct } from './products.service';
 export async function storefrontOffers() {
   const now = new Date().toISOString();

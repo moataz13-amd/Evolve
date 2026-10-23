@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { catalogSlug } from '../../utils/catalogEditor';
 import { createUUID } from '../../utils/uuid';
 import { deliverySettingsError } from '../../utils/deliveryEstimate';
+import { isSafeStorefrontPath, safeSocialUrl } from '../../utils/storefrontLinks';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -76,13 +77,18 @@ export function RecordForm({
         .string()
         .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Use lowercase letters, numbers and hyphens.');
     if (field.key === 'cta_url')
-      shape[field.key] = z.string().regex(/^\/(?!\/)/, 'Use a store path such as /shop.');
+      shape[field.key] = z.string().refine(isSafeStorefrontPath, 'Use a store path such as /shop.');
     if (field.key === 'currency')
       shape[field.key] = z.string().regex(/^[A-Z]{3}$/, 'Use a three-letter ISO currency code.');
     if (['email', 'store_email'].includes(field.key))
       shape[field.key] = field.required ? z.string().email() : z.string().email().or(z.literal(''));
     if (['instagram', 'facebook', 'tiktok'].includes(field.key))
-      shape[field.key] = z.string().url().startsWith('https://').or(z.literal(''));
+      shape[field.key] = z
+        .string()
+        .refine(
+          (value) => !value || !!safeSocialUrl(value, field.key),
+          `Use a secure ${field.key} link.`,
+        );
   }
   if (resource.table === 'offers') shape.offer_type_id = z.string().uuid().nullable();
   if (resource.table === 'offer_types') {

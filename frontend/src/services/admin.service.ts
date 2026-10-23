@@ -1,10 +1,7 @@
 import { database } from '../lib/supabase';
 import type { Resource, Row } from '../types/admin';
+import { throwIfError } from './result';
 export const PAGE_SIZE = 20;
-export function throwIfError<T>(result: { data: T; error: { message: string } | null }) {
-  if (result.error) throw new Error(result.error.message);
-  return result.data;
-}
 export async function listRecords(resource: Resource, params: URLSearchParams) {
   const page = Math.max(1, Number(params.get('page')) || 1);
   let query = database()
