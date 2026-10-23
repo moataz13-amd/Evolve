@@ -377,6 +377,20 @@
   scrollbar-color: #555a50 transparent;
   padding: 18px 12px;
 }
+.admin-sidebar-navigation::-webkit-scrollbar {
+  width: 10px;
+}
+.admin-sidebar-navigation::-webkit-scrollbar-track {
+  background: transparent;
+}
+.admin-sidebar-navigation::-webkit-scrollbar-thumb {
+  border: 2px solid #20231f;
+  border-radius: 999px;
+  background: #626960;
+}
+.admin-sidebar-navigation::-webkit-scrollbar-thumb:hover {
+  background: #d93636;
+}
 .admin-nav-group {
   margin-bottom: 18px;
 }
